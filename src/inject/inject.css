@@ -2,18 +2,28 @@
     width: 50%;
 }
 
-
 .stat-line {
-    color: #333 !important;
-}
-
-.stat-line .wrapper {
     height: 100px;
     overflow: scroll;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
 }
 
-.stat-line .wrapper .item {
+.stat-line > .sl {
     width: 50%;
+    padding-right: 5px;
+    font-size: 12px !important;
+    color: #333 !important;
+    display: flex;
+    flex-direction: row;
+}
+
+.stat-line > .sl > .lbl {
+    padding: 0 5px;
+    flex-grow: 1;
+}
+
+.stat-line > .sl > .score {
+    font-weight: bold;
 }
