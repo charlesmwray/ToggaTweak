@@ -1,0 +1,19 @@
+.specifics table tbody th:nth-child(3) {
+    width: 50%;
+}
+
+
+.stat-line {
+    color: #333 !important;
+}
+
+.stat-line .wrapper {
+    height: 100px;
+    overflow: scroll;
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-line .wrapper .item {
+    width: 50%;
+}
