@@ -1,35 +1,16 @@
 chrome.extension.sendMessage({}, function(response) {
 	var readyStateCheckInterval = setInterval(function() {
-		if (document.readyState === "complete") {
+
+		// if (document.readyState === "complete") {
+		if ($('team-stats table tbody tr td').length !== 0) {
 			clearInterval(readyStateCheckInterval);
 
 			setTimeout(function() {
 				console.log('hi');
-				var stats = document.querySelectorAll('.stat-line');
 
-				var replacers = [
-					[' AER', '*Aerial(s) Won'],
-					[' GC', '*Goal(s) Conceded'],
-					[' CC', 'Key Passes'],
-					[' SOT', 'Shot(s) on Target'],
-					[' SCR', 'Successful Cross(es)'],
-					[' STO', 'Successful Dribbles'],
-					[' SOT', 'Shot(s) on Target'],
-					[' DIS', 'Dispossessed'],
-					[' OG', 'Own *Goals'],
-					[' CS', 'Clean Sheet'],
-					[' SV', 'Saves'],
-					[' PS', 'Penalties Saved'],
-					[' INT', 'Interception(s)'],
-					[' TW', 'Tackle(s) Won'],
-					[' PS', 'Penalty Saved'],
-					[' YC', 'Yellow Card(s)'],
-					[' RC', 'Red Card'],
-					[' CLR', 'Effective Clearance(s)'],
-					[' M', 'Minutes Played'],
-					[' G', 'Goal(s)'],
-					[' A', 'Assist(s)']
-				];
+				var a = $('body').addClass('h');
+
+				var stats = document.querySelectorAll('.stat-line');
 
 				var replacerObj = {
 					AER : {
@@ -122,15 +103,16 @@ chrome.extension.sendMessage({}, function(response) {
 				stats.forEach( function(line) {
 					line.innerHTML = line.innerHTML.trim();
 
+					var position = $('.stat-line').parent().parent().find('.position').text();
+					var scores = [];
+					var newScores = '';
+
 					// Only make changes if there are stats
 					if (
 						line.innerText.search('AM') === -1 &&
 						line.innerText.search('PM') === -1 &&
 						line.innerText.search('stats') === -1
 					) {
-						scores = [];
-						newScores = '';
-
 						line.innerHTML.split(', ').forEach( function(item) {
 							scores.push( item.split(' ') );
 						})
