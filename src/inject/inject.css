@@ -35,3 +35,7 @@
     height: 18px;
     padding: 0px 4px;
 }
+
+.stat-line > .sl > .score:empty {
+    display: none;
+}

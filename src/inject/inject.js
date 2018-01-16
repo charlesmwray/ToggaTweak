@@ -180,10 +180,10 @@ chrome.extension.sendMessage({}, function(response) {
 					G   : {
 							label: 'Goal(s)',
 							points: {
-								GOA: 9,
-								DEF: 9,
-								MID: 10,
-								FOR: 10
+								GOA: 10,
+								DEF: 10,
+								MID: 9,
+								FOR: 9
 							}
 						},
 					A   : {
@@ -219,7 +219,7 @@ chrome.extension.sendMessage({}, function(response) {
 
 							var n = score[0];
 							var label = replacerObj[score[1]].label;
-							var scores = n * replacerObj[score[1]].points[position];
+							var scores = score[1] !== 'M' ? n * replacerObj[score[1]].points[position] : ''
 
 							console.log(scores);
 
