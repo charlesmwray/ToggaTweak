@@ -10,128 +10,229 @@ chrome.extension.sendMessage({}, function(response) {
 
 				var a = $('body').addClass('h');
 
-				var stats = document.querySelectorAll('.stat-line');
+				var stats = Array.prototype.slice.call(
+					document.querySelectorAll('team-stats table tbody tr:not(:first-of-type)')
+				);
 
 				var replacerObj = {
 					AER : {
 							label: 'Aerial(s) Won',
-							value: 1
+							points: {
+								GOA: 1,
+								DEF: 1,
+								MID: .5,
+								FOR: .5
+							}
 						},
 					GC  : {
 							label: 'Goal(s) Conceded',
-							value: 1
+							points: {
+								GOA: -2,
+								DEF: -2,
+								MID: 0,
+								FOR: 0
+							}
 						},
 					CC  : {
 							label: 'Key Passes',
-							value: 1
-						},
-					SOT : {
-							label: 'Shot(s) on Target',
-							value: 1
+							points: {
+								GOA: 6,
+								DEF: 2,
+								MID: 2,
+								FOR: 2
+							}
 						},
 					SCR : {
 							label: 'Successful Cross(es)',
-							value: 1
+							points: {
+								GOA: 1,
+								DEF: 1,
+								MID: 1,
+								FOR: 1
+							}
 						},
 					STO : {
 							label: 'Successful Dribbles',
-							value: 1
+							points: {
+								GOA: 1,
+								DEF: 1,
+								MID: 1,
+								FOR: 1
+							}
 						},
 					SOT : {
 							label: 'Shot(s) on Target',
-							value: 1
+							points: {
+								GOA: 2,
+								DEF: 2,
+								MID: 2,
+								FOR: 2
+							}
 						},
 					DIS : {
 							label: 'Dispossessed',
-							value: 1
+							points: {
+								GOA: -1.5,
+								DEF: -1.5,
+								MID: -1.5,
+								FOR: -1.5
+							}
 						},
 					OG  : {
 							label: 'Own *Goals',
-							value: 1
+							points: {
+								GOA: -9,
+								DEF: -9,
+								MID: -9,
+								FOR: -9
+							}
 						},
 					CS  : {
 							label: 'Clean Sheet',
-							value: 1
+							points: {
+								GOA: 8,
+								DEF: 6,
+								MID: 1,
+								FOR: 0
+							}
 						},
 					SV  : {
 							label: 'Saves',
-							value: 1
+							points: {
+								GOA: 2,
+								DEF: 0,
+								MID: 0,
+								FOR: 0
+							}
 						},
 					PS  : {
 							label: 'Penalties Saved',
-							value: 1
+							points: {
+								GOA: 8,
+								DEF: 0,
+								MID: 0,
+								FOR: 0
+							}
 						},
 					INT : {
 							label: 'Interception(s)',
-							value: 1
+							points: {
+								GOA: 1,
+								DEF: 1,
+								MID: 1,
+								FOR: 1
+							}
 						},
 					TW  : {
 							label: 'Tackle(s) Won',
-							value: 1
+							points: {
+								GOA: 1,
+								DEF: 1,
+								MID: 1,
+								FOR: 1
+							}
 						},
 					PS  : {
 							label: 'Penalty Saved',
-							value: 1
+							points: {
+								GOA: 10,
+								DEF: 20,
+								MID: 30,
+								FOR: 40
+							}
 						},
 					YC  : {
 							label: 'Yellow Card(s)',
-							value: 1
+							points: {
+								GOA: -3,
+								DEF: -3,
+								MID: -3,
+								FOR: -3
+							}
 						},
 					RC  : {
 							label: 'Red Card',
-							value: 1
+							points: {
+								GOA: -7,
+								DEF: -7,
+								MID: -7,
+								FOR: -7
+							}
 						},
 					CLR : {
 							label: 'Effective Clearance(s)',
-							value: 1
+							points: {
+								GOA: .25,
+								DEF: .25,
+								MID: 0,
+								FOR: 0
+							}
 						},
 					M   : {
 							label: 'Minutes Played',
-							value: 1
+							points: {
+								GOA: 0,
+								DEF: 0,
+								MID: 0,
+								FOR: 0
+							}
 						},
 					G   : {
 							label: 'Goal(s)',
-							value: 1
+							points: {
+								GOA: 9,
+								DEF: 9,
+								MID: 10,
+								FOR: 10
+							}
 						},
 					A   : {
 							label: 'Assist(s)',
-							value: 1
+							points: {
+								GOA: 6,
+								DEF: 6,
+								MID: 8,
+								FOR: 9
+							}
 						}
 				};
 
-
 				stats.forEach( function(line) {
-					line.innerHTML = line.innerHTML.trim();
-
-					var position = $('.stat-line').parent().parent().find('.position').text();
+					var cells = line.querySelectorAll('td');
+					var position = cells[0].querySelector('.position').innerHTML.trim()
+					var statLine = cells[2].querySelector('.stat-line');
 					var scores = [];
 					var newScores = '';
 
 					// Only make changes if there are stats
 					if (
-						line.innerText.search('AM') === -1 &&
-						line.innerText.search('PM') === -1 &&
-						line.innerText.search('stats') === -1
+						statLine &&
+						statLine.innerText.search('AM') === -1 &&
+						statLine.innerText.search('PM') === -1 &&
+						statLine.innerText.search('stats') === -1
 					) {
-						line.innerHTML.split(', ').forEach( function(item) {
+						statLine.innerText.split(', ').forEach( function(item) {
 							scores.push( item.split(' ') );
 						})
 
 						scores.forEach( function(score) {
 
 							var n = score[0];
-							var label =      replacerObj[score[1]].label;
-							var scores = n * replacerObj[score[1]].value;
+							var label = replacerObj[score[1]].label;
+							var scores = n * replacerObj[score[1]].points[position];
+
+							console.log(scores);
 
 							newScores += `<div class="sl">
 								<span class="n">${n}</span>
 								<span class="lbl">${label}</span>
+								<span class="score">${scores}</span>
 							</div>`;
 
 							// <span class="score">${scores}</span>
 						});
 
-						line.innerHTML = newScores;
+						statLine.innerHTML = newScores;
 					}
 				})
 			}, 3000);

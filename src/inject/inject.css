@@ -12,7 +12,7 @@
 
 .stat-line > .sl {
     width: 50%;
-    padding-right: 5px;
+    padding: 2px 5px 2px 0;
     font-size: 12px !important;
     color: #333 !important;
     display: flex;
@@ -26,4 +26,12 @@
 
 .stat-line > .sl > .score {
     font-weight: bold;
+}
+
+.stat-line > .sl > .score {
+    background-color: #00B06A;
+    border-radius: 2px;
+    color: #fff;
+    height: 18px;
+    padding: 0px 4px;
 }
