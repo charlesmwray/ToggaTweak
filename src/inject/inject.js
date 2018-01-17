@@ -5,7 +5,14 @@ chrome.extension.sendMessage({}, function(response) {
 		if ($('team-stats table tbody tr td').length !== 0) {
 			clearInterval(readyStateCheckInterval);
 
-			setTimeout(function() {
+            // add event listener to trigger style changes
+			document.querySelector('.fa.fa-chevron-left').addEventListener('click', function() { setTimeout(updateScoreStyles, 3000) } );
+			document.querySelector('.fa.fa-chevron-right').addEventListener('click', function() { setTimeout(updateScoreStyles, 3000) } );
+
+			// delay score style changes
+			setTimeout(updateScoreStyles, 3000);
+
+			var updateScoreStyles = function() {
 				console.log('hi');
 
 				var a = $('body').addClass('h');
@@ -235,9 +242,7 @@ chrome.extension.sendMessage({}, function(response) {
 						statLine.innerHTML = newScores;
 					}
 				})
-			}, 3000);
-
-
+			}
 		}
 	}, 10);
 });
