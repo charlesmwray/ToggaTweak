@@ -1,22 +1,10 @@
 chrome.extension.sendMessage({}, function(response) {
 	var readyStateCheckInterval = setInterval(function() {
 
-		// if (document.readyState === "complete") {
-		if ($('team-stats table tbody tr td').length !== 0) {
-			clearInterval(readyStateCheckInterval);
+		var updateScoreStyles = function() {
+			message.add('Loading...');
 
-            // add event listener to trigger style changes
-			document.querySelector('.fa.fa-chevron-left').addEventListener('click', function() { setTimeout(updateScoreStyles, 3000) } );
-			document.querySelector('.fa.fa-chevron-right').addEventListener('click', function() { setTimeout(updateScoreStyles, 3000) } );
-
-			// delay score style changes
-			setTimeout(updateScoreStyles, 3000);
-
-			var updateScoreStyles = function() {
-				console.log('hi');
-
-				var a = $('body').addClass('h');
-
+			setTimeout(function() {
 				var stats = Array.prototype.slice.call(
 					document.querySelectorAll('team-stats table tbody tr:not(:first-of-type)')
 				);
@@ -228,8 +216,6 @@ chrome.extension.sendMessage({}, function(response) {
 							var label = replacerObj[score[1]].label;
 							var scores = score[1] !== 'M' ? n * replacerObj[score[1]].points[position] : ''
 
-							console.log(scores);
-
 							newScores += `<div class="sl">
 								<span class="n">${n}</span>
 								<span class="lbl">${label}</span>
@@ -241,8 +227,59 @@ chrome.extension.sendMessage({}, function(response) {
 
 						statLine.innerHTML = newScores;
 					}
-				})
+				});
+
+				message.remove();
+
+			}, 3000);
+
+		}
+
+		var message = {
+			getMessage: function(copy) {
+				var modal = document.createElement("div");
+				var message = document.createElement("div");
+
+				message.appendChild(
+					document.createTextNode( copy || 'Loading...')
+				);
+
+				modal.appendChild( message );
+
+				modal.classList.add('tt-modal');
+				message.classList.add('tt-message');
+
+				return modal
+			},
+			add: function(copy) {
+				var target = document.querySelector('.background');
+
+				document.querySelector('body').classList.add('tt-has-modal');
+
+				target.parentNode.insertBefore( this.getMessage(copy), target);
+			},
+			remove: function() {
+				var modal = document.querySelector('.tt-modal');
+
+				document.querySelector('body').classList.remove('tt-has-modal');
+
+				modal && modal.parentNode.removeChild(modal);
 			}
+		}
+
+		// if (document.readyState === "complete") {
+		if ($('team-stats table tbody tr td').length !== 0) {
+			clearInterval(readyStateCheckInterval);
+
+            // add event listener to trigger style changes
+			document.querySelector('.fa.fa-chevron-left').addEventListener('click', function() { setTimeout(updateScoreStyles, 500) } );
+			document.querySelector('.fa.fa-chevron-right').addEventListener('click', function() { setTimeout(updateScoreStyles, 500) } );
+
+			// delay score style changes
+			setTimeout(updateScoreStyles, 500);
+
+		} else {
+			message.remove();
 		}
 	}, 10);
 });
